@@ -20,27 +20,49 @@ public class Main {
             //Конец отсчета времени
             System.out.println((System.currentTimeMillis() - time) + " мс" + ", Найдено строк: " + cityList.size());
             //Выбор сортировки
-            System.out.println("Выберите тип сортировки"+"\n"+"1.По наименования города"+"\n"+"2.По федеральному округу и наименованию города"+"\n"+">>");
-            String userEnter=scanner.nextLine();
-            switch (userEnter){
-                case("1"):
+            System.out.print("Выберите тип операции" +
+                    "\n" + "1.Сортировка по наименования города" +
+                    "\n" + "2.Сортировка по федеральному округу и наименованию города" +
+                    "\n" + "3.Поиск города с наибольшим населением" +
+                    "\n" + ">>");
+            String userEnter = scanner.nextLine();
+            switch (userEnter) {
+                case ("1"):
                     // Используем компаратор, игнорирующий регистр
                     Comparator<City> comparator = Comparator.comparing(City::getName, String.CASE_INSENSITIVE_ORDER);
                     // Сортируем список
                     Collections.sort(cityList, comparator);
+                    //Вывод списка
+                    for (City city : cityList) {
+                        System.out.println(city.toString());
+                    }
                     break;
-                case("2"):
+                case ("2"):
                     // Создаем компаратор, сравнивающий объекты по полю district, а затем по полю name
                     Comparator<City> comparator1 = Comparator
                             .comparing(City::getDistrict)
                             .thenComparing(City::getName);
                     // Сортируем список
                     Collections.sort(cityList, comparator1);
+                    //Вывод списка
+                    for (City city : cityList) {
+                        System.out.println(city.toString());
+                    }
                     break;
-            }
-            //Вывод списка
-            for (City city : cityList) {
-                System.out.println(city.toString());
+                case ("3"):
+                    // Преобразуем список в массив
+                    City[] cityArray = cityList.toArray(new City[cityList.size()]);
+                    int indexCityWithMaxPopulation =0;
+                    int maxPopulation = 0;
+                    for (int i = 0; i<cityArray.length;i++) {
+                        if(maxPopulation<Integer.parseInt(cityArray[i].getPopulation())){
+                            maxPopulation = Integer.parseInt(cityArray[i].getPopulation());
+                            indexCityWithMaxPopulation = i;
+                        }
+                    }
+                    //Вывод города с наибольшим числом жителей.
+                    System.out.println(cityArray[indexCityWithMaxPopulation].toString());
+                    break;
             }
         } catch (Exception e) {
             System.err.println(e);
@@ -61,11 +83,11 @@ public class Main {
                 //Если колонка начинается на кавычки или заканчиваеться на кавычки
                 columnList.add(splitedText[i]);
             }
-            if(columnList.size()==6){
+            if (columnList.size() == 6) {
                 //Заполнение city
                 cityList.add(new City(columnList.get(1), columnList.get(2), columnList.get(3), columnList.get(4), columnList.get(5)));
-            } else if(columnList.get(0)!=null) {
-                System.out.println("Запись в строке "+columnList.get(0)+" содержит не полный набор данных");
+            } else if (columnList.get(0) != null) {
+                System.out.println("Запись в строке " + columnList.get(0) + " содержит не полный набор данных");
             }
         }
         return cityList;
