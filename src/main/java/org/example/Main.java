@@ -24,6 +24,7 @@ public class Main {
                     "\n" + "1.Сортировка по наименования города" +
                     "\n" + "2.Сортировка по федеральному округу и наименованию города" +
                     "\n" + "3.Поиск города с наибольшим населением" +
+                    "\n" + "4.Поиск кол-ва городов в регионе" +
                     "\n" + ">>");
             String userEnter = scanner.nextLine();
             switch (userEnter) {
@@ -62,6 +63,24 @@ public class Main {
                     }
                     //Вывод города с наибольшим числом жителей.
                     System.out.println(cityArray[indexCityWithMaxPopulation].toString());
+                    break;
+                case ("4"):
+                    //Заполнение карты списков городов
+                    Map<String, List<City>> regions = new HashMap<>();
+                    for (City city: cityList){
+                        if(regions.containsKey(city.region)){
+                            regions.get(city.region).add(city);
+                        } else{
+                            regions.put(city.region, new ArrayList<City>());
+                            regions.get(city.region).add(city);
+                        }
+                    }
+                    //Вывод регионов и кол-во городов в них.
+                    for (Map.Entry<String, List<City>> region : regions.entrySet()) {
+                        String key = region.getKey();
+                        Integer value = region.getValue().size();
+                        System.out.println("Регион: " + key + ", Кол-во городов " + value);
+                    }
                     break;
             }
         } catch (Exception e) {
